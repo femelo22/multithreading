@@ -1,6 +1,7 @@
 package utils;
 
 import java.net.Socket;
+import java.util.Scanner;
 
 public class DistributeTasks implements Runnable {
 
@@ -11,12 +12,17 @@ public class DistributeTasks implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Distribuindo tarefas para " + socket);
-
         try {
-            Thread.sleep(1000);
+            System.out.println("Distribuindo tarefas para " + socket);
+            Scanner clientEntrypoint = new Scanner(socket.getInputStream());
+
+            while (clientEntrypoint.hasNextLine()) {
+                String command = clientEntrypoint.nextLine();
+                System.out.println(command);
+            }
+            clientEntrypoint.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 }
